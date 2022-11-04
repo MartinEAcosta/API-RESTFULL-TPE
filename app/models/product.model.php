@@ -27,13 +27,13 @@ class ProductModel{
         return $product;
     }
 
-    public function insert($name,$price,$description,$stock,$id_category){
-        $query = $this->db->prepare("INSERT INTO Products (p_name, price, p_description , stock, id_category) VALUES (?, ?, ?, ?, ?");
-        $query->execute([$name,$price,$description,$stock,$id_category]);
+    public function insert($p_name , $price , $p_description , $stock , $id_category ){
 
-        return $this->db->lastInsertId();
+        $query = $this->db->prepare("INSERT INTO Products (p_name, price, p_description, stock ,id_category) VALUES ( ? , ? , ? , ? , ?)");
+        $query->execute([$p_name , $price , $p_description , $stock ,$id_category ]);
+
+        return $this->db->lastInsertId(); 
     }
-
     function delete($id){
         $query= $this->db->prepare('DELETE FROM Products WHERE id = ? ');
         $query->execute([$id]);

@@ -6,10 +6,10 @@ require_once './app/controllers/product-api.controller.php';
 $router = new Router();
 
 // defina la tabla de ruteo
-$router->addRoute('tasks', 'GET', 'TaskApiController', 'getTasks');
-$router->addRoute('tasks/:ID', 'GET', 'TaskApiController', 'getTask');
-$router->addRoute('tasks/:ID', 'DELETE', 'TaskApiController', 'deleteTask');
-$router->addRoute('tasks', 'POST', 'TaskApiController', 'insertTask'); 
+$router->addRoute('products', 'GET', 'ProductApiController', 'getProducts');
+$router->addRoute('products/:ID', 'GET', 'ProductApiController', 'getProduct');
+$router->addRoute('products/:ID', 'DELETE', 'ProductApiController', 'deleteProduct');
+$router->addRoute('products', 'POST', 'ProductApiController', 'insertProduct'); 
 
 // ejecuta la ruta (sea cual sea)
 $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);

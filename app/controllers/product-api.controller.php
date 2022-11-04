@@ -17,7 +17,6 @@ class ProductApiController {
     }
 
     private function getData(){
-
         return json_decode($this->data);
     }
 
@@ -48,15 +47,18 @@ class ProductApiController {
             $this->view->response("El producto con el id=$id no existe, ERROR", 404);
     }
 
+
+    // No se necesitan paramatros, pero por las dudas se pone
     public function insertProduct($paramas = null){
         $product = $this->getData();
 
-        if(empty($product->name) || empty($product->price) || empty($product->description) || empty($product->stock) || empty($product->id_category)){
+        if(empty($product->p_name) || empty($product->price) || empty($product->p_description) || empty($product->stock) || empty($product->id_category)){
             $this->view->model->response("Complete los datos", 400);
         }
         else{
-            $id = $this->model->insert($product->name, $product->price, $product->description, $product->stock, $product->id_category);
+            $id = $this->model->insert($product->p_name, $product->price, $product->p_description, $product->stock, $product->id_category);
             $product = $this->model->get($id);
-            $this->view->response($product, 201);        }
+            $this->view->response($product, 201);
+        }
     }
 }
