@@ -18,6 +18,22 @@ class ProductModel{
         return $products;
     }
 
+    public function getAscById(){
+        $query = $this->db->prepare('SELECT * FROM `Products` ORDER BY `Products`.`id` ASC');
+        $query->execute();
+
+        $products = $query->fetchAll(PDO::FETCH_OBJ);
+        return $products;
+
+    }
+    public function getDescById(){
+        $query = $this->db->prepare('SELECT Products.id,p_name,price,p_description,stock,img,id_category,Categories.c_name FROM Products INNER JOIN Categories ON  id_category = Categories.id ORDER BY Products.id DESC;');
+        $query->execute();
+
+        $products = $query->fetchAll(PDO::FETCH_OBJ);
+        return $products;
+        
+    }
     public function get($id){
         $query = $this->db->prepare("SELECT * FROM Products WHERE id = ?");
         $query->execute([$id]);
