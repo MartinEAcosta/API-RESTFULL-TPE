@@ -10,7 +10,7 @@ class ProductModel{
 
     public function getAll(){
 
-        $query = $this->db->prepare("SELECT * FROM Products");
+        $query = $this->db->prepare('SELECT Products. *, Categories.c_name as categoria FROM Products JOIN Categories ON Products.id_category = Categories.id_category ');
         $query->execute();
 
         $products = $query->fetchAll(PDO::FETCH_OBJ);
@@ -26,6 +26,14 @@ class ProductModel{
         
         return $product;
     }
+    /*public function selectCategory($id){
+
+        $query = $this->db->prepare('SELECT * FROM Products WHERE id_category = ? ');
+        $query->execute([$id]);
+        $category = $query->fetchAll(PDO::FETCH_OBJ);
+        return $category;
+
+    }*/
 
     public function insert($p_name , $price , $p_description , $stock , $id_category ){
 
@@ -34,6 +42,16 @@ class ProductModel{
 
         return $this->db->lastInsertId(); 
     }
+
+    public function update($id, $p_name, $price, $p_description, $stock ,$img,  $id_category){
+
+        $query= $this->db->prepare("UPDATE `Products` SET `p_name` = ? , `price` = ? , `p_description` = ? , `stock` =  ? , `img` = ?, `id_category` = ? WHERE `Products`.`id` = ?");
+        
+        $query->execute(array($p_name,$price,$p_description,$stock,$img,$id_category,$id));
+
+    }
+
+
     function delete($id){
         $query= $this->db->prepare('DELETE FROM Products WHERE id = ? ');
         $query->execute([$id]);

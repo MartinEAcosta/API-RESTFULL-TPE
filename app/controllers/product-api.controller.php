@@ -34,6 +34,12 @@ class ProductApiController {
         else
             $this->view->response("El producto con el id=$id no existe, ERROR", 404);
     }
+    /*public function filterCategories($params = null, $id){
+        $this->model->getAll();
+        $this->model->selectCategory($id);
+
+
+    }*/
 
     public function deleteProduct($params = null){
         $id = $params[':ID'];
@@ -49,7 +55,7 @@ class ProductApiController {
 
 
     // No se necesitan paramatros, pero por las dudas se pone
-    public function insertProduct($paramas = null){
+    public function insertProduct($params = null){
         $product = $this->getData();
 
         if(empty($product->p_name) || empty($product->price) || empty($product->p_description) || empty($product->stock) || empty($product->id_category)){
@@ -58,6 +64,17 @@ class ProductApiController {
         else{
             $id = $this->model->insert($product->p_name, $product->price, $product->p_description, $product->stock, $product->id_category);
             $product = $this->model->get($id);
+            $this->view->response($product, 201);
+        }
+    }
+    public function updateProduct($params = null){
+        $id = $params[':ID'];
+        $product = $this->getData();
+        if(empty($product->p_name) || empty($product->price) || empty($product->p_description) || empty($product->stock) || empty($product->id_category)){
+            $this->view->model->response("Complete los datos", 400);
+        }
+        else{
+            $this->model->update($product->id,$product->p_name, $product->price, $product->p_description, $product->stock,$product->img,$product->id_category);
             $this->view->response($product, 201);
         }
     }
