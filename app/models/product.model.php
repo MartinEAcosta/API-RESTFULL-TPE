@@ -18,22 +18,16 @@ class ProductModel{
         return $products;
     }
 
-    public function getAscById(){
-        $query = $this->db->prepare('SELECT * FROM `Products` ORDER BY `Products`.`id` ASC');
-        $query->execute();
+    public function getASCorDESC($sort, $order){
+        if($order != null && $sort != null){
+            $query = $this->db->prepare("SELECT * FROM `Products` ORDER BY $sort $order");
+            $query->execute();
 
-        $products = $query->fetchAll(PDO::FETCH_OBJ);
-        return $products;
-
+            $products = $query->fetchAll(PDO::FETCH_OBJ);
+            return $products;
+        }
     }
-    public function getDescById(){
-        $query = $this->db->prepare('SELECT Products.id,p_name,price,p_description,stock,img,id_category,Categories.c_name FROM Products INNER JOIN Categories ON  id_category = Categories.id ORDER BY Products.id DESC;');
-        $query->execute();
 
-        $products = $query->fetchAll(PDO::FETCH_OBJ);
-        return $products;
-        
-    }
     public function get($id){
         $query = $this->db->prepare("SELECT * FROM Products WHERE id = ?");
         $query->execute([$id]);
@@ -42,15 +36,6 @@ class ProductModel{
         
         return $product;
     }
-    /*public function selectCategory($id){
-
-        $query = $this->db->prepare('SELECT * FROM Products WHERE id_category = ? ');
-        $query->execute([$id]);
-        $category = $query->fetchAll(PDO::FETCH_OBJ);
-        return $category;
-
-    }*/
-
     public function insert($p_name , $price , $p_description , $stock , $id_category ){
 
         $query = $this->db->prepare("INSERT INTO Products (p_name, price, p_description, stock ,id_category) VALUES ( ? , ? , ? , ? , ?)");

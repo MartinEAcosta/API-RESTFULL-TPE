@@ -21,29 +21,23 @@ class ProductApiController {
     }
 
     public function getProducts($params = null){
-        if(isset($_GET['order']) && isset($_GET['sort'])){
-            if($_GET['sort'] == 'id' || $_GET['sort'] == "ID"){
-                if($_GET['order'] == "asc" || $_GET['order'] == "ASC"){
-                    $products = $this->model->getAscById();
+        // Ordename segun lo que el usuario pida por parametro
+        $sort = $_GET['sort'];
+        $order = $_GET['order'];
+        if(isset($order) && isset($sort)){
+            if($sort == "id" || $sort == "price" || $sort == "p_name" || $sort == "id_category" || $sort == "p_description" || $sort == "stock"){
+                if($order == "asc" || $order == "ASC" || $order == 'desc' || $order == 'DESC'){
+                    $products = $this->model->getASCorDESC($sort, $order);
                     $this->view->response($products);
                 }
-                elseif($_GET['order'] == 'desc' || $_GET['order'] == 'DESC'){
-                    $products = $this->model->getDescById();
-                    $this->view->response($products);
+                else{
+                    $this->view->response("Valor de variables incorrecto", 400);
                 }
-            }
-            else{
-                $this->view->response("Valor de variables incorrecto", 400);
             }
         }
-
-        if(!isset($_GET['order']) && !isset($_GET['sort'])){
-
+        if (empty($order) &&  empty($sort)){
             $products = $this->model->getAll();
             $this->view->response($products);
-        }
-        elseif (!isset($_GET['order']) && !isset($_GET['sort'])){
-            $this->view->response('Error en la consulta', 400);
         }
     }
     public function getProduct($params = null){
@@ -55,13 +49,6 @@ class ProductApiController {
         else
             $this->view->response("El producto con el id=$id no existe, ERROR", 404);
     }
-    /*public function filterCategories($params = null, $id){
-        $this->model->getAll();
-        $this->model->selectCategory($id);
-
-
-    }*/
-
     public function deleteProduct($params = null){
         $id = $params[':ID'];
 
