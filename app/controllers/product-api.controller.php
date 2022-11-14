@@ -24,6 +24,7 @@ class ProductApiController {
         // Ordename segun lo que el usuario pida por parametro
         $sort = $_GET['sort'];
         $order = $_GET['order'];
+        $filter = $_GET['filter'];
         if(isset($order) && isset($sort)){
             if($sort == "id" || $sort == "price" || $sort == "p_name" || $sort == "id_category" || $sort == "p_description" || $sort == "stock"){
                 if($order == "asc" || $order == "ASC" || $order == 'desc' || $order == 'DESC'){
@@ -31,11 +32,18 @@ class ProductApiController {
                     $this->view->response($products);
                 }
                 else{
-                    $this->view->response("Valor de variables incorrecto", 400);
+                    $this->view->response("Valor de variables sort/order incorrecto", 400);
                 }
             }
         }
-        if (empty($order) &&  empty($sort)){
+        if(isset($filter) && is_numeric($filter)){
+            $products = $this->model->filter($filter);
+            $this->view->response($products);
+        }
+        elseif ($filter != null){
+            $this->view->response("Valor de categorias incorrecto", 400);
+        }
+        else{
             $products = $this->model->getAll();
             $this->view->response($products);
         }

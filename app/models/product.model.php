@@ -27,7 +27,15 @@ class ProductModel{
             return $products;
         }
     }
+    function filter($filter){
+        if($filter != null){
+            $query = $this->db->prepare("SELECT * FROM `Products` WHERE `id_category`= $filter");
+            $query->execute();
 
+            $products = $query->fetchAll(PDO::FETCH_OBJ);
+            return $products;
+        }
+    }
     public function get($id){
         $query = $this->db->prepare("SELECT * FROM Products WHERE id = ?");
         $query->execute([$id]);
