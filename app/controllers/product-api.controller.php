@@ -21,28 +21,44 @@ class ProductApiController {
     }
 
     public function getProducts($params = null){
-        // Ordename segun lo que el usuario pida por parametro
-        $sort = $_GET['sort'];
-        $order = $_GET['order'];
-        $filter = $_GET['filter'];
+       
+        $sort = $_GET['sort'] ?? null;
+        $order = $_GET['order'] ?? null;
+        $filter = $_GET['filter'] ?? null;
+        $page = $_GET['page'] ?? null;
+        $size = $_GET['size'] ?? null;
+         // Ordename segun lo que el usuario pida por parametro
         if(isset($order) && isset($sort)){
             if($sort == "id" || $sort == "price" || $sort == "p_name" || $sort == "id_category" || $sort == "p_description" || $sort == "stock"){
                 if($order == "asc" || $order == "ASC" || $order == 'desc' || $order == 'DESC'){
                     $products = $this->model->getASCorDESC($sort, $order);
                     $this->view->response($products);
                 }
-                else{
-                    $this->view->response("Valor de variables sort/order incorrecto", 400);
-                }
+            }
+            else{
+                $this->view->response("Valor de variables sort/order incorrecto", 400);
             }
         }
-        if(isset($filter) && is_numeric($filter)){
+        // Filtrame el numero de categoria
+        if(isset($filter)){
+            if($filter == null ||!is_numeric($filter)){
+                $this->view->response("Valor de variables filter incorrecto", 400);
+            }
+            else{
             $products = $this->model->filter($filter);
             $this->view->response($products);
+            }
         }
-        elseif ($filter != null){
-            $this->view->response("Valor de categorias incorrecto", 400);
-        }
+        // Paginame segun el numero y el tamaño que pida el usuario
+        if(isset($page) && isset($size)){      
+            if(!is_numeric($page) || !is_numeric($size)){
+                $this->view->response("Valor de las paginas o tamaño invalido",400);
+            }
+            else{
+            $products = $this->model->getPages($page,$size);
+            $this->view->response($products);
+            }
+        }   
         else{
             $products = $this->model->getAll();
             $this->view->response($products);
@@ -87,7 +103,7 @@ class ProductApiController {
         $id = $params[':ID'];
         $product = $this->getData();
         if($product){
-            $this->model->update($product->id,$product->p_name, $product->price, $product->p_description, $product->stock,$product->img,$product->id_category);
+            $this->model->update($id,$product->p_name, $product->price, $product->p_description, $product->stock,$product->img,$product->id_category);
             $this->view->response($product, 201);
         }
         else{

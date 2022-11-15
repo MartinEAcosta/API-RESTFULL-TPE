@@ -37,7 +37,6 @@ class CategoriesApiController {
 
     public function deleteCategory($params = null){
         $id = $params[':ID'];
-
         $category = $this->model->get($id);
         if($category){
             $this->model->delete($id);
@@ -45,6 +44,7 @@ class CategoriesApiController {
         }
         else
             $this->view->response("La categoria con el id=$id no existe, ERROR", 404);
+        
     }
 
     public function insertCategory($params = null){
@@ -57,6 +57,17 @@ class CategoriesApiController {
             $id = $this->model->insert($category->c_name);
             $category = $this->model->get($id);
             $this->view->response($category, 201);
+        }
+    }
+    public function updateCategory($params = null){
+        $id_category = $params[':ID'];
+        $category = $this->getData();
+        if($category){
+            $this->model->update($category->c_name,$id_category);
+            $this->view->response($category, 201);
+        }
+        else{
+            $this->view->model->response("Complete los datos", 400);
         }
     }
 }

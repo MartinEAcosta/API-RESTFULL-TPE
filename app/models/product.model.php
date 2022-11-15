@@ -36,6 +36,15 @@ class ProductModel{
             return $products;
         }
     }
+    function getPages($page,$size){
+        $begin = ($page * $size) - $size;
+        $query = $this->db->prepare( "SELECT * FROM `Products` LIMIT $begin, $size");
+        $query->execute();
+
+        $products = $query->fetchAll(PDO::FETCH_OBJ);
+        return $products;
+
+    }
     public function get($id){
         $query = $this->db->prepare("SELECT * FROM Products WHERE id = ?");
         $query->execute([$id]);

@@ -20,7 +20,7 @@ class CategoriesModel{
 
     public function get($id){
         
-        $query = $this->db->prepare("SELECT * FROM Categories WHERE id = ?");
+        $query = $this->db->prepare("SELECT * FROM Categories WHERE id_category = ?");
         $query->execute([$id]);
 
         $category = $query->fetch(PDO::FETCH_OBJ);
@@ -30,13 +30,21 @@ class CategoriesModel{
 
     public function insert($c_name){
 
-        $query = $this->db->prepare("INSERT INTO Categories (c_name) VALUES ?");
+        $query = $this->db->prepare("INSERT INTO Categories (c_name) VALUES (?)");
         $query->execute([$c_name]);
 
         return $this->db->lastInsertId(); 
     }
     function delete($id){
-        $query= $this->db->prepare('DELETE FROM Categories WHERE id_category = ? ');
+        $query= $this->db->prepare('DELETE FROM Categories WHERE id_category = (?)');
         $query->execute([$id]);
+    }
+
+    public function update($c_name,$id_category){
+
+        $query= $this->db->prepare("UPDATE `Categories` SET `c_name` = ?  WHERE `Categories`.`id_category` = ?");
+        
+        $query->execute(array($c_name,$id_category));
+
     }
 }
